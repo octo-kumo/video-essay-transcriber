@@ -49,21 +49,24 @@ async def analyze_yt(link, window=None, verbose=False):
 
 
 async def analyze_video(video, window=None, verbose=False):
-    print("analyze_video", video)
-    window['load-progress'].UpdateBar(0, 3)
-    audio = prep_audio(video)
-    window['load-progress'].UpdateBar(1, 3)
-    title = os.path.basename(video)
-    text = analyze_audio(audio, window=window, verbose=verbose)
-    print("analyzed audio: ", text)
-    kf = keyFrame(video, window)
-    print("keyFrame: ", text)
-    cl = kf.get_clusters()
-    selection = select_images(cl)
-    print("selection: ", selection)
-    images = kf.get_frames(selection)
-    md = generate_md(title, text, images)
-    window['markdown'].update(md)
+	try:
+		print("analyze_video", video)
+		window['load-progress'].UpdateBar(0, 3)
+		audio = prep_audio(video)
+		window['load-progress'].UpdateBar(1, 3)
+		title = os.path.basename(video)
+		text = analyze_audio(audio, window=window, verbose=verbose)
+		print("analyzed audio: ", text)
+		kf = keyFrame(video, window)
+		print("keyFrame: ", text)
+		cl = kf.get_clusters()
+		selection = select_images(cl)
+		print("selection: ", selection)
+		images = kf.get_frames(selection)
+		md = generate_md(title, text, images)
+		window['markdown'].update(md)
+	except Exception as e:
+		print(e)
 
 
 def prep_audio(video):

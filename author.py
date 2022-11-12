@@ -12,7 +12,8 @@ def generate_md(title, text, images):
         with open(os.path.join(title, f"{i}.png")) as file:
             fromarray(f).save(file)
     for section in text:
-        pass
+        content += section.text + "\n\n"
+    content += '\n\n'.join([os.path.join(title, f"{i}.png") for i in range(len(images))])
     return content
 
 

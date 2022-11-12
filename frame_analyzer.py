@@ -19,9 +19,9 @@ from tqdm import trange
 
 
 class keyFrame:
-    # model_yolo = torch.hub.load('ultralytics/yolov3', 'yolov3')  # or yolov3-spp, yolov3-tiny, custom
-    # model_vgg = VGG16()
-    # model_vgg = Model(inputs=model_vgg.inputs, outputs=model_vgg.layers[-2].output)
+    model_yolo = torch.hub.load('ultralytics/yolov3', 'yolov3')  # or yolov3-spp, yolov3-tiny, custom
+    model_vgg = VGG16()
+    model_vgg = Model(inputs=model_vgg.inputs, outputs=model_vgg.layers[-2].output)
 
     def get_square(self, x1, y1, x2, y2):
         x = x2 - x1
@@ -98,7 +98,7 @@ class keyFrame:
                 idx = 0
                 while (True):
                     idx = random.randint(0, len(self.faces) - 1)
-                    if idx == i: break
+                    if self.res[idx] == i: break
                 temp.append(self.faces[idx])
             ret.append(temp)
 

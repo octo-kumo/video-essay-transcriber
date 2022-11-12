@@ -9,7 +9,7 @@ sg.theme('DefaultNoMoreNagging')
 
 
 def array_to_data(array):
-    im = fromarray(array)
+    im = fromarray(array).resize((112, 112))
     with BytesIO() as output:
         im.save(output, format="PNG")
         data = output.getvalue()
@@ -32,17 +32,19 @@ def select_images(clusters):
     window = sg.Window('Select Images', root)
 
     while True:
-        event, values = window.read()
-        if event == sg.WIN_CLOSED or event == 'cancel':
+        w, event, values = sg.read_all_windows()
+        if event == sg.WIN_CLOSED or event == 'cancel' or event == 'Cancel (Include All)':
+            window.close()
             return [False for i in range(len(clusters))]
         if callable(event):
             event()
-        if event == "ok":
+        if event == "ok" or event == "Ok":
+            window.close()
             return [values[i] for i in range(len(clusters))]
-
+    return []
 
 if __name__ == "__main__":
-    v = keyFrame("download/XNBP18nrRdw.mp4")
+    v = keyFrame("videos/AdamNeely/0ytoUuO-qvg\n.mp4")
     c = v.get_clusters()
     print(c)
     print(select_images(c))

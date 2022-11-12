@@ -65,6 +65,9 @@ def main():
         if event == 'clear':
             window['file'].Update('')
             window['yt-link'].Update('')
+            
+        if event == "ok":
+            print("died")
     window.close()
     loop.call_soon_threadsafe(loop.stop)
     t.join()
