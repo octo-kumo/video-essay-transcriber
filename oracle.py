@@ -14,7 +14,7 @@ from author import generate_md
 from frame_analyzer import keyFrame
 from selector import select_images
 
-model = Model("models/vosk-model-en-us-0.22-lgraph", lang="en-us")
+model = Model(lang="en-us")
 
 import pytube.request
 

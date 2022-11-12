@@ -2,3 +2,5 @@
 download
 models
 processing
+/videos
+*.pyc
