@@ -10,6 +10,10 @@ from pytube.exceptions import VideoUnavailable
 from tqdm import tqdm
 from vosk import Model, KaldiRecognizer
 
+from author import generate_md
+from frame_analyzer import keyFrame
+from selector import select_images
+
 model = Model("models/vosk-model-en-us-0.22-lgraph", lang="en-us")
 
 import pytube.request
@@ -49,7 +53,17 @@ async def analyze_video(video, window=None, verbose=False):
     window['load-progress'].UpdateBar(0, 3)
     audio = prep_audio(video)
     window['load-progress'].UpdateBar(1, 3)
-    return os.path.basename(video), analyze_audio(audio, window=window, verbose=verbose)
+    title = os.path.basename(video)
+    text = analyze_audio(audio, window=window, verbose=verbose)
+    print("analyzed audio: ", text)
+    kf = keyFrame(video, window)
+    print("keyFrame: ", text)
+    cl = kf.get_clusters()
+    selection = select_images(cl)
+    print("selection: ", selection)
+    images = kf.get_frames(selection)
+    md = generate_md(title, text, images)
+    window['markdown'].update(md)
 
 
 def prep_audio(video):

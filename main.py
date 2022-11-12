@@ -38,8 +38,14 @@ def main():
         [sg.Multiline(size=(60, 10), key='preview')]
     ]
 
+    final_md_tab = [
+        [sg.Frame("Frame Analysis Progress", [[sg.ProgressBar(100, size=(40, 20), key='frame-progress')]])],
+        [sg.Multiline(size=(60, 10), key='markdown')]
+    ]
+
     root = [[sg.TabGroup([[sg.Tab('Input', input_file_tab, key='input'),
-                           sg.Tab('Process', process_file_tab, key='process')]],
+                           sg.Tab('Process', process_file_tab, key='process'),
+                           sg.Tab('Final', final_md_tab, key='video')]],
                          selected_title_color='green')]]
     # Create the Window
     window = sg.Window('Window Title', root)

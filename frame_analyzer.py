@@ -19,9 +19,9 @@ from tqdm import trange
 
 
 class keyFrame:
-    model_yolo = torch.hub.load('ultralytics/yolov3', 'yolov3')  # or yolov3-spp, yolov3-tiny, custom
-    model_vgg = VGG16()
-    model_vgg = Model(inputs=model_vgg.inputs, outputs=model_vgg.layers[-2].output)
+    # model_yolo = torch.hub.load('ultralytics/yolov3', 'yolov3')  # or yolov3-spp, yolov3-tiny, custom
+    # model_vgg = VGG16()
+    # model_vgg = Model(inputs=model_vgg.inputs, outputs=model_vgg.layers[-2].output)
 
     def get_square(self, x1, y1, x2, y2):
         x = x2 - x1
@@ -41,9 +41,8 @@ class keyFrame:
     def normalize(self, img):
         return cv.cvtColor(cv.cvtColor(img, cv.COLOR_RGB2GRAY), cv.COLOR_GRAY2RGB)  # wtf
 
-    def __init__(self, path):
+    def __init__(self, path, window=None):
         cap = cv.VideoCapture(path)
-
         a = scenedetect.detect(path,
                                scenedetect.detectors.AdaptiveDetector(
                                    adaptive_threshold=5.0,
@@ -58,6 +57,8 @@ class keyFrame:
 
         num = 0
         cap = cv.VideoCapture(path)
+        fps = cap.get(cv.CAP_PROP_FPS)
+        print("fps = ", fps)
         self.frames = {}
         while (cap.isOpened()):
             ret, frame = cap.read()
@@ -70,7 +71,6 @@ class keyFrame:
 
         self.yolo_out = {}
         self.faces = []
-
         for i in trange(len(self.times)):
             for j in range(1):
                 if (self.times[i] - 1 + j in self.frames):
@@ -84,6 +84,7 @@ class keyFrame:
                                 self.normalize(cv.resize(self.frames[self.times[i] - 1 + j][y1:y2, x1:x2], (224, 224),
                                                          interpolation=cv.INTER_AREA))
                             )
+            if window: window['frame-progress'].UpdateBar(i, len(self.times))
 
         faces_flat = self.model_vgg.predict(np.array(self.faces))
         self.cluster = min(5, faces_flat.shape[0])
@@ -124,9 +125,9 @@ class keyFrame:
 
             time = (self.times[i - 1] + self.times[i]) // 2
             if (isBad):
-                if (mn < width / 2):
+                if mn < width / 2:
                     fin.append((time, self.frames[self.times[i] - 1][0:height, mn:width]))
-                elif (width / 2 < mx):
+                elif width / 2 < mx:
                     fin.append((time, self.frames[self.times[i] - 1][0:height, 0:mx]))
 
             else:
