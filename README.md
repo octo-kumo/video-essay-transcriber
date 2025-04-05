@@ -13,7 +13,7 @@ $ python main.py
 ```
 ## Work Distribution
 
-| Ashley  | Zhao Yun  |
+| Ashley  | Yun  |
 | --- | --- |
 |   Idea, Scraping, Video Processing  |  Audio Processing, GUI   |
 
